@@ -44,13 +44,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             JetPackComposeCatalogTheme {
+                var myText by remember { mutableStateOf("") }
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
                     Column() {
-                        MyTextFieldOutlined()
+                        MyTextFieldOutlined(myText) {myText = it}
                     }
                 }
             }
@@ -58,14 +59,11 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-fun MyTextFieldOutlined() {
-    var myText by remember { mutableStateOf("") }
-
+fun MyTextFieldOutlined(name: String, onValueChanged: (String) -> Unit) {
     OutlinedTextField(
-        value = myText,
-        onValueChange = { myText = it },
+        value = name,
+        onValueChange = { onValueChanged(it) },
         label = { Text(text = "Escribe tu nombre") },
         modifier = Modifier.padding(24.dp),
         colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -75,6 +73,7 @@ fun MyTextFieldOutlined() {
     )
 }
 
+@Preview(showBackground = true)
 @Composable
 fun MyTextFieldAdvance() {
     var myText by remember { mutableStateOf("") }
