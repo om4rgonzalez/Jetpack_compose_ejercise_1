@@ -1,8 +1,10 @@
 package net.bintelligence.jetpackcomposecatalog
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,10 +17,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -30,6 +35,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -50,14 +56,55 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Column() {
-                        MyTextFieldOutlined(myText) {myText = it}
+                    Column {
+                        MyButton()
                     }
                 }
             }
         }
     }
 }
+
+@Preview(showBackground = true)
+@Composable
+fun MyButton() {
+    var enabled by rememberSaveable {
+        mutableStateOf(true)
+    }
+    Column(
+        Modifier
+            .fillMaxSize()
+            .padding(24.dp)) {
+        Button(onClick = { enabled = false},
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = Color.Magenta,
+            contentColor = Color.Blue),
+            border = BorderStroke(5.dp, Color.Green),
+            enabled = enabled
+        ) {
+            Text(text = "Boton")
+        }
+
+        OutlinedButton(
+            onClick = { enabled = false },
+            modifier = Modifier.padding(top = 8.dp),
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color.Magenta,
+                contentColor = Color.Blue,
+                disabledBackgroundColor = Color.Gray,
+                disabledContentColor = Color.Red
+            ),
+            enabled = enabled
+        ) {
+            Text(text = "Outlined Button")
+        }
+
+        TextButton(onClick = { /*TODO*/ }) {
+            Text(text = "Text button")
+        }
+    }
+}
+
 
 @Composable
 fun MyTextFieldOutlined(name: String, onValueChanged: (String) -> Unit) {
@@ -73,7 +120,6 @@ fun MyTextFieldOutlined(name: String, onValueChanged: (String) -> Unit) {
     )
 }
 
-@Preview(showBackground = true)
 @Composable
 fun MyTextFieldAdvance() {
     var myText by remember { mutableStateOf("") }
